@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Calculadora Masa Corporal (IMC)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body class="container mt-5">
+
+    <h2 class="mb-4 text-center">Calculadora Masa Corporal (IMC)</h2>
+
+    <form>
+        <div class="form-group">
+            <label for="altura">Altura (m):</label> 
+            <input type="number" step="0.01" class="form-control" id="altura" name="altura" required oninput="checkInputs()">
+        </div>
+
+        <div class="form-group">
+            <label for="peso">Peso (kg):</label>
+            <input type="number" class="form-control" id="peso" name="peso" required oninput="checkInputs()">
+        </div>
+
+        <button type="button" class="btn btn-primary mt-3" onclick="calcularPeso()" id="calcularBtn" disabled>Calcular</button>
+    </form>
+
+    <div class="mt-4">
+        <h3 class="text-center">Resultado</h3>
+        <table class="table mx-auto">
+            <tbody id="resultadoTabla">
+                <tr data-bs-toggle="tooltip" data-bs-placement="right" title="IMC menor a 18.5">
+                    <td>Bajo Peso</td>
+                </tr>
+                <tr data-bs-toggle="tooltip" data-bs-placement="right" title="IMC entre 18.5 y 24.9">
+                    <td>Peso Normal</td>
+                </tr>
+                <tr data-bs-toggle="tooltip" data-bs-placement="right" title="IMC entre 25 y 29.9">
+                    <td>Sobrepeso</td>
+                </tr>
+                <tr data-bs-toggle="tooltip" data-bs-placement="right" title="IMC mayor o igual a 30">
+                    <td>Obesidad</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <h4 class="text-center">Fórmula para la Masa Corporal (IMC):</h4>
+        <p class="text-center">IMC = Peso (kg) / (Altura (m) * Altura (m))</p>
+        <p class="text-center" id="resultadoTexto">El resultado de IMC es de: </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        function checkInputs() {
+            var altura = document.getElementById('altura').value;
+            var peso = document.getElementById('peso').value;
+            var calcularBtn = document.getElementById('calcularBtn');
+            if (altura >= 0 && peso >= 0) {
+                calcularBtn.removeAttribute('disabled');
+            } else {
+                calcularBtn.setAttribute('disabled', 'disabled');
+            }
+        }
+
+        function calcularPeso() {
+            var altura = parseFloat(document.getElementById('altura').value);
+            var peso = parseFloat(document.getElementById('peso').value);
+            var imc = peso / (altura * altura);
+
+            var resultadoTabla = document.getElementById('resultadoTabla');
+            var filas = resultadoTabla.getElementsByTagName('tr');
+
+            for (var i = 0; i < filas.length; i++) {
+                filas[i].style.backgroundColor = ''; 
+            }
+
+            var resultadoTexto = document.getElementById('resultadoTexto');
+            resultadoTexto.textContent = 'El resultado de IMC es de: ' + imc.toFixed(2);
+
+            if (imc < 18.5) {
+                filas[0].style.backgroundColor = 'yellow';
+            } else if (imc >= 18.5 && imc <= 24.9) {
+                filas[1].style.backgroundColor = 'green';
+            } else if (imc >= 25 && imc <= 29.9) {
+                filas[2].style.backgroundColor = 'orange';
+            } else {
+                filas[3].style.backgroundColor = 'red';
+            }
+        }
+    </script>
+
+</body>
+</html>
